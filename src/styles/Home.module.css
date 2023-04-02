@@ -1,0 +1,15 @@
+.container {
+  padding: 0 2rem;
+  background: white;
+  align-content: center;
+}
+
+.grid {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+}
+.card img {
+  max-height: 200px;
+}
