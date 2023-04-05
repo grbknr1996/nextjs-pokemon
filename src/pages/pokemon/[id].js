@@ -7,7 +7,22 @@ import { Inter } from "next/font/google";
 import styles from "../../styles/Details.module.css";
 import Link from "next/link";
 
-export async function getServerSideProps({ params }) {
+export async function getStaticPaths() {
+  const resp = await fetch(
+    `https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json`
+  );
+  const pokemon = await resp.json();
+  return {
+    paths: pokemon.map((pokemon) => ({
+      params: {
+        id: pokemon.id.toString(),
+      },
+    })),
+    fallback: false,
+  };
+}
+
+export async function getStaticProps({ params }) {
   const resp = await fetch(
     `https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${params.id}.json`
   );
@@ -15,6 +30,7 @@ export async function getServerSideProps({ params }) {
     props: {
       pokemon: await resp.json(),
     },
+    revalidate: 30,
   };
 }
 const Details = ({ pokemon }) => {
